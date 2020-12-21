@@ -16,7 +16,6 @@ An example of no desync:
 ![No Desync Example](https://i.imgur.com/n9iHIbM.png)
 
 An example of a desync and the logs for it:  
-(The "3" is to indicate logging the first 3 frames of desync rather than default first 15)
-
+(The "3" is to indicate logging the first 3 frames of desync rather than default first 15)  
 ![With Desync Example](https://i.imgur.com/yUWvDYO.png)
 
