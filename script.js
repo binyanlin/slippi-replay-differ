@@ -87,9 +87,21 @@ const compare = (gamename1, gamename2) => {
       return; 
     }
   }
+  console.log("No Desyncs Found");
 }
 
 let gameFields = process.argv.slice(2);
+
+// Adds ".slp" if not already manually included for the first 2 arguments.
+const inputStringCheck = () => {
+  let slp = ".slp";
+  if (gameFields[0].split(".").length === 1) {
+    gameFields[0] += slp;
+  }
+  if (gameFields[1].split(".").length === 1) {
+    gameFields[1] += slp;
+  }
+}
 
 if (gameFields.length < 2 || gameFields.length > 3) {
   console.log("You must give two full game file names in the format 'gamename1.slp' 'gamename2.slp'");
@@ -97,10 +109,12 @@ if (gameFields.length < 2 || gameFields.length > 3) {
 }
 
 if (gameFields.length === 3) {
+  inputStringCheck();
   desyncDisplayCount = gameFields[2];
   compare(gameFields[0], gameFields[1]);
 }
 
 if (gameFields.length == 2) {
+  inputStringCheck();
   compare(gameFields[0], gameFields[1]);
 }
