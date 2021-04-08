@@ -44,39 +44,50 @@ const compare = (gamename1, gamename2) => {
     let frameLog = `Frame ${i}: `;
     let display = {};
     let desync = false;
+    let frameDesync = false;
 
     for (let j = 0; j < playerCount1; j++) {
-      Object.keys(frames1[i].players[j].pre).forEach((key) => {
-        // if (key === "physicalRTrigger" || key === "physicalLTrigger") {
-        //   let game1trigger = (frames1[i].players[j].pre[key])*255.0;
-        //   let game2trigger = (frames2[i].players[j].pre[key])*255.0;
-        //   frames1[i].players[j].pre[key] = game1trigger;
-        //   frames2[i].players[j].pre[key] = game2trigger;
-        //   if (game1trigger <= 42 && game2trigger <= 42) {
-        //     return;
-        //   }
-        // }
-        if (key === "physicalRTrigger" || key === "physicalLTrigger") {
-          return;
-        }
-        if (frames1[i].players[j].pre[key] !== frames2[i].players[j].pre[key]) {
-          desync = true;
-          display[key] = [frames1[i].players[j].pre[key], frames2[i].players[j].pre[key]];
-        }
-      });
+      try {
+        Object.keys(frames1[i].players[j].pre).forEach((key) => {
+          // if (key === "physicalRTrigger" || key === "physicalLTrigger") {
+          //   let game1trigger = (frames1[i].players[j].pre[key])*255.0;
+          //   let game2trigger = (frames2[i].players[j].pre[key])*255.0;
+          //   frames1[i].players[j].pre[key] = game1trigger;
+          //   frames2[i].players[j].pre[key] = game2trigger;
+          //   if (game1trigger <= 42 && game2trigger <= 42) {
+          //     return;
+          //   }
+          // }
+          if (key === "physicalRTrigger" || key === "physicalLTrigger") {
+            return;
+          }
+          if (frames1[i].players[j].pre[key] !== frames2[i].players[j].pre[key]) {
+            desync = true;
+            frameDesync = true;
+            display[key] = [frames1[i].players[j].pre[key], frames2[i].players[j].pre[key]];
+          }
+        });  
+      } catch (error) {
+        console.log(frames1[i]);
+      }
       
       if (desync) {
         console.log(frameLog);
         console.log(`port ${j+1}`);
         console.log(display);
       }
+      
+      display = {};
+      desync = false;
     }
-    if (desync) {
+    if (frameDesync) {
       totalDesync++;
       if (totalDesync === 1) {
         firstDesync = i;
       }
+      frameDesync = false;
     }
+
     if (totalDesync > desyncDisplayCount) {
       let minutes = Math.floor((28800 - firstDesync) / 3600);
       let seconds = Math.floor(60 - (firstDesync % 3600) / 60);
